@@ -1,7 +1,0 @@
-export abstract class BaseRepository<T> {
-  protected readonly database: Array<T>;
-
-  constructor() {
-    this.database = new Array<T>(); // las t son datos genericos
-  }
-}
