@@ -56,8 +56,8 @@ export class SecurityService {
       const accountType = new AccountTypeEntity();
       accountType.id = 'Falta el ID por defecto del tipo de cuenta';
       const newAccount = {
-        customer,
-        accountType,
+        CustomerEntityId: customer.id,
+        accountType: accountType.id,
         id: '',
         balance: 0,
         state: true,

@@ -1,39 +1,42 @@
-import {
-  Body,
-  Controller,
-  Delete,
-  Get,
-  Param,
-  ParseUUIDPipe,
-  Put,
-} from '@nestjs/common';
-import { AccountService, NewAccountDto } from 'src/business';
+import { Body, Controller, Post, Get, ParseUUIDPipe } from '@nestjs/common';
+import { Delete, Param, Put } from '@nestjs/common/decorators';
+import { NewAccountDto } from 'src/business';
 import { AccountEntity } from 'src/data';
+import { AccountServices } from '../../../business/services/account/account.service';
 
-@Controller('accounts')
+@Controller('account')
 export class AccountController {
-  constructor(private readonly accountService: AccountService) {}
+  constructor(private readonly accountServices: AccountServices) {}
 
-  @Get()
-  getAccounts(): AccountEntity[] {
-    return this.accountService.findAll();
+  @Post('newUser')
+  createAccount(@Body() accountId: NewAccountDto): AccountEntity {
+    return this.accountServices.createAccount(accountId);
   }
 
-  @Get()
-  getAccount(@Param('id', new ParseUUIDPipe()) id: string): AccountEntity {
-    return this.accountService.findOneById(id);
+  // Obtener el balance de una cuenta
+
+  @Get('balance/: accountId')
+  getBalance(@Param('accountId', ParseUUIDPipe) accountId: string): number {
+    return this.accountServices.getBalance(accountId);
   }
 
-  @Put()
-  modifyAccount(
-    @Param('id', new ParseUUIDPipe()) id: string,
-    @Body() account: NewAccountDto,
-  ): AccountEntity {
-    return this.accountService.updateAccount(id, account);
+  // Agregar balance a una cuenta
+
+  @Put('putBalance/: accountId')
+  putBalance(
+    @Param('accountId', ParseUUIDPipe) accountId: string,
+    @Param('amount') amount: number,
+  ): void {
+    this.accountServices.putBalance(accountId, amount);
   }
 
-  @Delete()
-  deleteAccount(@Param('id', new ParseUUIDPipe()) id: string): void {
-    return this.accountService.deleteAccount(id);
+  // Remover balance de una cuenta
+
+  @Put('remuve/: accounrId')
+  removeBalance(
+    @Param('accountId', ParseUUIDPipe) accountId: string,
+    @Param('amount') amount: number,
+  ): void {
+    this.accountServices.removeBalance(accountId, amount);
   }
 }

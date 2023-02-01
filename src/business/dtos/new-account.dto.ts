@@ -4,7 +4,7 @@ export class NewAccountDto {
   @IsUUID()
   CustomerEntity: string;
   @IsUUID()
-  accontType: string;
+  accountType: string;
   @IsNumber()
   balance: number;
 }
