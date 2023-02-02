@@ -1,7 +1,12 @@
 import { AccountTypeRepository } from './../../../data/persistence/repositories/account-type.repository';
 import { Injectable } from '@nestjs/common';
 import { NewAccountDto } from 'src/business/dtos';
-import { AccountEntity, AccountRepository, CustomerRepository } from 'src/data';
+import {
+  AccountEntity,
+  AccountRepository,
+  AccountTypeEntity,
+  CustomerRepository,
+} from 'src/data';
 
 @Injectable()
 export class AccountServices {
@@ -67,5 +72,80 @@ export class AccountServices {
 
   removeBalance(accountId: string, amount: number) {
     this.accountRepository.findOneById(accountId).balance -= amount;
+  }
+  /**
+   * Verificar la disponibilidad de un monto a retirar de una cuenta
+   *
+   * @param {string} accountId
+   * @param {string} amount
+   * @return {*}  {boolean}
+   * @memberof AccountService
+   */
+
+  verifyBalance(accountId: string, amount: number): boolean {
+    if (this.accountRepository.findOneById(accountId).balance >= amount) {
+      return true;
+    }
+    return false;
+  }
+  /**
+   * Obtener el estado de una cuenta
+   *
+   * @param {string} accountId
+   * @return {*}  {boolean}
+   * @memberof AccountService
+   */
+  gettStatus(accountId: string): boolean {
+    return this.accountRepository.findOneById(accountId).state;
+  }
+
+  /**
+   * Cambiar el estado de una cuenta
+   *
+   * @param {string} accountId
+   * @param {boolean} state
+   * @memberof AccountService
+   */
+
+  changetState(accountId: string, state: boolean) {
+    this.accountRepository.findOneById(accountId).state = state;
+  }
+
+  /**
+   * Obtener el tipo de cuenta de una cuenta
+   *
+   * @param {string} accountId
+   * @return {*}  {AccountTypeEntity}
+   * @memberof AccountService
+   */
+
+  getAccount(accountId: string): AccountTypeEntity {
+    let newAccount = new AccountTypeEntity();
+    newAccount = this.accountRepository.findOneById(accountId).accountType;
+    return newAccount;
+  }
+
+  /**
+   * Cambiar el tipo de cuenta a una cuenta
+   *
+   * @param {string} accountId
+   * @param {string} accountTypeId
+   * @return {*}  {AccountTypeEntity}
+   * @memberof AccountService
+   */
+  changeAccount(accountId: string, accountTypeId: string): AccountTypeEntity {
+    const newChangeAccount = this.accountRepository.findOneById(accountTypeId);
+    return this.accountRepository.update(accountId, newChangeAccount)
+      .accountType;
+  }
+
+  /**
+   * Borrar una cuenta
+   *
+   * @param {string} accountId
+   * @memberof AccountService
+   */
+  deleteAccount(accountId: string) {
+    this.accountRepository.delete(accountId);
   }
 }
