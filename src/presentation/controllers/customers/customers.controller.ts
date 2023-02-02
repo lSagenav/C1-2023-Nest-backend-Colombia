@@ -5,6 +5,7 @@ import {
   Get,
   Param,
   ParseUUIDPipe,
+  Patch,
   Post,
   Put,
 } from '@nestjs/common';
@@ -25,7 +26,7 @@ export class CustomersController {
   }
 
   // actualizar usuario
-  @Put(':id')
+  @Patch(':id')
   updatecustomer(
     @Param('id', ParseUUIDPipe) id: string,
     @Body() customer: NewCustomerDTO,
@@ -34,7 +35,7 @@ export class CustomersController {
   }
 
   // Obtener información de un cliente
-  @Post(':id')
+  @Get(':id')
   getCustomerInfo(
     @Param('id', ParseUUIDPipe) customerId: string,
   ): CustomerEntity {
