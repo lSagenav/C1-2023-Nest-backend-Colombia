@@ -1,3 +1,4 @@
+import { CustomerService } from './../../../business/services/customer/customer.service';
 import {
   Body,
   Controller,
@@ -5,30 +6,42 @@ import {
   Param,
   ParseUUIDPipe,
   Post,
+  Put,
 } from '@nestjs/common';
-import { CustomerService, NewCustomerDTO } from 'src/business';
+import { NewCustomerDTO } from 'src/business';
 import { CustomerEntity } from 'src/data';
 
 @Controller('customers')
 export class CustomersController {
   constructor(private readonly customerService: CustomerService) {}
-  @Get()
+  @Get() //trae todos los usuarios
   findAllUsers(): CustomerEntity[] {
     return this.customerService.findAll();
   }
 
-  @Post()
+  @Post() //registrar usuario
   registerUser(@Body() customer: NewCustomerDTO): CustomerEntity {
     return this.customerService.newCustomer(customer);
   }
-  @Post()
-  getCustomerInf(
+
+  // actualizar usuario
+  @Put(':id')
+  updatecustomer(
+    @Param('id', ParseUUIDPipe) id: string,
+    @Body() customer: NewCustomerDTO,
+  ): CustomerEntity {
+    return this.customerService.updatedCustomer(id, customer);
+  }
+
+  // Obtener información de un cliente
+  @Post(':id')
+  getCustomerInfo(
     @Param('id', ParseUUIDPipe) customerId: string,
   ): CustomerEntity {
     return this.customerService.getCustomerInfo(customerId);
   }
 
-  @Post()
+  @Put(':id') //se desactiva la cuenta
   unsubscribe(@Param('id', ParseUUIDPipe) customerId: string): boolean {
     return this.customerService.unsubscribe(customerId);
   }

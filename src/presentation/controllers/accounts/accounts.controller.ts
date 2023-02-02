@@ -2,11 +2,11 @@ import { Body, Controller, Post, Get, ParseUUIDPipe } from '@nestjs/common';
 import { Delete, Param, Put } from '@nestjs/common/decorators';
 import { NewAccountDto } from 'src/business';
 import { AccountEntity, AccountTypeEntity } from 'src/data';
-import { AccountServices } from '../../../business/services/account/account.service';
+import { AccountService } from '../../../business/services/account/account.service';
 
 @Controller('account')
 export class AccountController {
-  constructor(private readonly accountServices: AccountServices) {}
+  constructor(private readonly accountServices: AccountService) {}
 
   @Post('newUser')
   createAccount(@Body() accountId: NewAccountDto): AccountEntity {

@@ -9,7 +9,7 @@ import {
 } from 'src/data';
 
 @Injectable()
-export class AccountServices {
+export class AccountService {
   constructor(
     private readonly accountRepository: AccountRepository,
     private readonly customerRepository: CustomerRepository,
@@ -34,8 +34,8 @@ export class AccountServices {
    * @return {*}  {AccountEntity}
    * @memberof AccountService
    */
-  createAccount(accountId: NewAccountDto): AccountEntity {
-    const createAccount = this.accountMapping(accountId);
+  createAccount(account: NewAccountDto): AccountEntity {
+    const createAccount = this.accountMapping(account);
     return this.accountRepository.register(createAccount);
   }
   /**

@@ -4,13 +4,22 @@ import {
   InternalServerErrorException,
   UnauthorizedException,
 } from '@nestjs/common';
+
+// Models
+import { CustomerModel } from 'src/data/models';
+
+// Repositories
+import { CustomerRepository } from 'src/data/persistence/repositories';
+
+// Services
+import { AccountService } from '../account/account.service';
+
+// Entities
 import {
   AccountTypeEntity,
   CustomerEntity,
-  CustomerModel,
-  CustomerRepository,
-} from 'src/data';
-import { AccountService } from '../account';
+} from 'src/data/persistence/entities';
+
 @Injectable()
 export class SecurityService {
   constructor(
@@ -41,34 +50,34 @@ export class SecurityService {
    * @return {*}  {string}
    * @memberof SecurityService
    */
-  signUp(user: CustomerModel): string {
-    const newCustomer = new CustomerEntity();
-    newCustomer.documentType = user.documentType;
-    newCustomer.document = user.document;
-    newCustomer.fullName = user.fullName;
-    newCustomer.email = user.email;
-    newCustomer.phone = user.phone;
-    newCustomer.password = user.password;
+  // signUp(user: CustomerModel): string {
+  //   const newCustomer = new CustomerEntity();
+  //   newCustomer.documentType = user.documentType;
+  //   newCustomer.document = user.document;
+  //   newCustomer.fullName = user.fullName;
+  //   newCustomer.email = user.email;
+  //   newCustomer.phone = user.phone;
+  //   newCustomer.password = user.password;
 
-    const customer = this.customerRepository.register(newCustomer);
+  //   const customer = this.customerRepository.register(newCustomer);
 
-    if (customer) {
-      const accountType = new AccountTypeEntity();
-      accountType.id = 'Falta el ID por defecto del tipo de cuenta';
-      const newAccount = {
-        CustomerEntityId: customer.id,
-        accountType: accountType.id,
-        id: '',
-        balance: 0,
-        state: true,
-      };
+  //   if (customer) {
+  //     const accountType = new AccountTypeEntity();
+  //     accountType.id = 'Falta el ID por defecto del tipo de cuenta';
+  //     const newAccount = {
+  //       id: '',
+  //       CustomerEntityId: customer.id,
+  //       accountType: accountType.id,
+  //       balance: 0,
+  //       state: true,
+  //     };
 
-      const account = this.accountService.createAccount(newAccount);
+  //     const account = this.accountService.createAccount(newAccount);
 
-      if (account) return 'Falta retornar un JWT';
-      else throw new InternalServerErrorException();
-    } else throw new InternalServerErrorException();
-  }
+  //     if (account) return 'Falta retornar un JWT';
+  //     else throw new InternalServerErrorException();
+  //   } else throw new InternalServerErrorException();
+  // }
 
   /**
    * Salir del sistema

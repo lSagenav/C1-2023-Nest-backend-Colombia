@@ -2,7 +2,6 @@ import { Injectable } from '@nestjs/common';
 import { NewCustomerDTO } from 'src/business/dtos';
 import {
   CustomerEntity,
-  CustomerModel,
   CustomerRepository,
   DocumentTypeEntity,
 } from 'src/data';
@@ -49,9 +48,9 @@ export class CustomerService {
    * @return {*}  {CustomerEntity}
    * @memberof CustomerService
    */
-  updatedCustomer(id: string, customer: CustomerModel): CustomerEntity {
-    const UpdCus = this.customerRepository.update(id, customer);
-    return UpdCus;
+  updatedCustomer(id: string, customer: NewCustomerDTO): CustomerEntity {
+    const UpdCus = this.newCustomer(customer);
+    return this.customerRepository.update(id, UpdCus);
   }
 
   /**
