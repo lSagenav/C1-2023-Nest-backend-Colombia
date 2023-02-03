@@ -37,3 +37,5 @@ ob.subscribe(o2);
 ob.notify();
 ob.unsubscribe(o);
 ob.notify();
+
+// metodo terminado
