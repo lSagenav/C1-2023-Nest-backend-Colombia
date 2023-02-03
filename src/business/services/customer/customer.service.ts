@@ -10,14 +10,9 @@ import {
 export class CustomerService {
   constructor(private readonly customerRepository: CustomerRepository) {}
 
-  findAll(): CustomerEntity[] {
-    return this.customerRepository.findAll();
-  }
-
-  newCustomer(customer: NewCustomerDTO): CustomerEntity {
+  transmap(customer: NewCustomerDTO): CustomerEntity {
     const documentType = new DocumentTypeEntity();
     documentType.id = customer.documentTypeId;
-
     const newCustomer = new CustomerEntity();
     newCustomer.documentType = documentType;
     newCustomer.document = customer.document;
@@ -26,8 +21,32 @@ export class CustomerService {
     newCustomer.phone = customer.phone;
     newCustomer.password = customer.password;
 
-    return this.customerRepository.register(newCustomer);
+    return newCustomer;
   }
+
+  findAll(): CustomerEntity[] {
+    return this.customerRepository.findAll();
+  }
+
+  newCustomer(customer: NewCustomerDTO): CustomerEntity {
+    const Customermap = this.transmap(customer);
+    return this.customerRepository.register(Customermap);
+  }
+
+  // newCustomer(customer: NewCustomerDTO): CustomerEntity {
+  //   const documentType = new DocumentTypeEntity();
+  //   documentType.id = customer.documentTypeId;
+
+  //   const newCustomer = new CustomerEntity();
+  //   newCustomer.documentType = documentType;
+  //   newCustomer.document = customer.document;
+  //   newCustomer.fullName = customer.fullName;
+  //   newCustomer.email = customer.email;
+  //   newCustomer.phone = customer.phone;
+  //   newCustomer.password = customer.password;
+
+  //   return this.customerRepository.register(newCustomer);
+  // }
   /**
    * Obtener información de un cliente
    *
@@ -49,8 +68,7 @@ export class CustomerService {
    * @memberof CustomerService
    */
   updatedCustomer(id: string, customer: NewCustomerDTO): CustomerEntity {
-    const UpdCus = this.newCustomer(customer);
-    return this.customerRepository.update(id, UpdCus);
+    return this.customerRepository.update(id, this.transmap(customer));
   }
 
   /**

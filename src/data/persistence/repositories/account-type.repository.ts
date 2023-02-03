@@ -7,6 +7,14 @@ export class AccountTypeRepository
   extends RepositoryBase<AccountTypeEntity>
   implements IAccountTypeRepository
 {
+  constructor() {
+    super();
+    this.database.push({
+      id: 'c49fdd2a-a365-11ed-a8fc-0242ac120002',
+      name: 'Ahorros',
+      state: true,
+    });
+  }
   findByState(state: boolean): AccountTypeEntity[] {
     const status = this.database.filter((item) => item.state == state);
     return status;
