@@ -8,31 +8,31 @@ import { AccountService } from '../../../business/services/account/account.servi
 export class AccountController {
   constructor(private readonly accountServices: AccountService) {}
 
-  @Post('newUser')
+  @Post('newAccount')
   createAccount(@Body() accountId: NewAccountDto): AccountEntity {
     return this.accountServices.createAccount(accountId);
   }
 
   // Obtener el balance de una cuenta
 
-  @Get('balance/: accountId')
+  @Get('balance/:accountId')
   getBalance(@Param('accountId', ParseUUIDPipe) accountId: string): number {
     return this.accountServices.getBalance(accountId);
   }
 
   // Agregar balance a una cuenta
 
-  @Put('putBalance/: accountId')
+  @Put('putBalance/:accountId')
   putBalance(
     @Param('accountId', ParseUUIDPipe) accountId: string,
-    @Param('amount') amount: number,
+    @Body('amount') amount: number,
   ): void {
     this.accountServices.putBalance(accountId, amount);
   }
 
   // Remover balance de una cuenta
 
-  @Put('remuve/: accounrId')
+  @Put('remuve/:accounrId')
   removeBalance(
     @Param('accountId', ParseUUIDPipe) accountId: string,
     @Param('amount') amount: number,
@@ -74,13 +74,13 @@ export class AccountController {
   @Put('type/:accountId')
   changeAccount(
     @Param('accountId') accountId: string,
-    @Param('accountTypeId') accountTypeId: string,
+    @Body() body: { accountTypeId: string },
   ): AccountTypeEntity {
-    return this.accountServices.changeAccount(accountId, accountTypeId);
+    return this.accountServices.changeAccount(accountId, body.accountTypeId);
   }
 
   //Borrar una cuenta
-  @Delete('delete/: accountId')
+  @Delete('delete/:accountId')
   deleteAccount(@Param('accountId') accountId: string): void {
     this.accountServices.deleteAccount(accountId);
   }

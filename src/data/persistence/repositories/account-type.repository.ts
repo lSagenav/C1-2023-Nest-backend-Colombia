@@ -9,11 +9,18 @@ export class AccountTypeRepository
 {
   constructor() {
     super();
-    this.database.push({
-      id: 'c49fdd2a-a365-11ed-a8fc-0242ac120002',
-      name: 'Ahorros',
-      state: true,
-    });
+    this.database.push(
+      {
+        id: 'c49fdd2a-a365-11ed-a8fc-0242ac120002',
+        name: 'Ahorros',
+        state: true,
+      },
+      {
+        id: 'c3221f3f-602e-4ff1-9c45-e85c14f5e987',
+        name: 'Corriente',
+        state: true,
+      },
+    );
   }
   findByState(state: boolean): AccountTypeEntity[] {
     const status = this.database.filter((item) => item.state == state);
