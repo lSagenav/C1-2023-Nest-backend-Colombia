@@ -19,6 +19,13 @@ export class AccountController {
   getBalance(@Param('accountId', ParseUUIDPipe) accountId: string): number {
     return this.accountServices.getBalance(accountId);
   }
+  // obtener cuenta por id
+  @Get('getAccount/:customerId')
+  getAccount(
+    @Param('customerId', ParseUUIDPipe) customerId: string,
+  ): AccountEntity[] {
+    return this.accountServices.getAccountId(customerId);
+  }
 
   // Agregar balance a una cuenta
 
@@ -32,20 +39,19 @@ export class AccountController {
 
   // Remover balance de una cuenta
 
-  @Put('remuve/:accounrId')
-  removeBalance(
-    @Param('accountId', ParseUUIDPipe) accountId: string,
-    @Param('amount') amount: number,
+  @Put('remove/:accountId') removeBalance(
+    @Param('accountId') accountId: string,
+    @Body() body: { amount: number },
   ): void {
-    this.accountServices.removeBalance(accountId, amount);
+    return this.accountServices.removeBalance(accountId, body.amount);
   }
   // Verificar balance de una cuenta
   @Get('verify/:accountId')
   verifyBalance(
     @Param('accountId', ParseUUIDPipe) accountId: string,
-    @Param('amount') amount: number,
+    @Body() body: { amount: number },
   ): boolean {
-    return this.accountServices.verifyBalance(accountId, amount);
+    return this.accountServices.verifyBalance(accountId, body.amount);
   }
 
   // Obtener estado de la cuenta
@@ -58,15 +64,15 @@ export class AccountController {
 
   @Put('state/:accountId')
   changetState(
-    @Param('AccountId', ParseUUIDPipe) accountId: string,
-    @Param('state') state: boolean,
+    @Param('accountId', ParseUUIDPipe) accountId: string,
+    @Body() body: { state: boolean },
   ): void {
-    this.accountServices.changetState(accountId, state);
+    this.accountServices.changetState(accountId, body.state);
   }
 
   //Obtener el tipo de cuenta
   @Get('type/:accountId')
-  getAccount(@Param('accountId') accountId: string): AccountTypeEntity {
+  getAccountType(@Param('accountId') accountId: string): AccountTypeEntity {
     return this.accountServices.getAccount(accountId);
   }
 

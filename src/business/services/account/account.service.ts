@@ -40,6 +40,13 @@ export class AccountService {
     return this.accountRepository.register(createAccount);
   }
   /**
+   *obtener cuenta por id
+   */
+  getAccountId(customerId: string): AccountEntity[] {
+    return this.accountRepository.findByCustomer(customerId);
+  }
+
+  /**
    * Obtener el balance de una cuenta
    *
    * @param {string} accountId
@@ -75,8 +82,24 @@ export class AccountService {
    * @memberof AccountService
    */
 
-  removeBalance(accountId: string, amount: number) {
-    this.accountRepository.findOneById(accountId).balance -= amount;
+  // removeBalance(accountId: string, amount: number) {
+  //   this.accountRepository.findOneById(accountId).balance -= amount;
+  // }
+  removeBalance(accountId: string, amount: number): void {
+    if (this.verifyAmountIntoBalance(accountId, amount)) {
+      this.accountRepository.findOneById(accountId).balance -= amount;
+    } else {
+      throw new Error(
+        'El valor que desea retirar no puede ser mayor al saldo que tiene en su cuenta',
+      );
+    }
+  }
+  verifyAmountIntoBalance(accountId: string, amount: number): boolean {
+    const account = this.accountRepository.findOneById(accountId);
+    if (account.balance < amount) {
+      return false;
+    }
+    return true;
   }
   /**
    * Verificar la disponibilidad de un monto a retirar de una cuenta
@@ -139,7 +162,7 @@ export class AccountService {
    * @memberof AccountService
    */
   changeAccount(accountId: string, accountTypeId: string): AccountTypeEntity {
-    const newChangeAccount = this.accountRepository.findOneById(accountTypeId);
+    const newChangeAccount = this.accountRepository.findOneById(accountId);
     newChangeAccount.accountType =
       this.accountTypeRepository.findOneById(accountTypeId);
     return this.accountRepository.update(accountId, newChangeAccount)

@@ -1,5 +1,6 @@
 import { Injectable } from '@nestjs/common';
-import { NewCustomerDTO } from 'src/business/dtos';
+import { NewAccountDto, NewCustomerDTO } from 'src/business/dtos';
+import { AccountService } from '../account/account.service';
 import {
   CustomerEntity,
   CustomerRepository,
@@ -8,7 +9,10 @@ import {
 
 @Injectable()
 export class CustomerService {
-  constructor(private readonly customerRepository: CustomerRepository) {}
+  constructor(
+    private readonly customerRepository: CustomerRepository,
+    private readonly accountService: AccountService,
+  ) {}
 
   transmap(customer: NewCustomerDTO): CustomerEntity {
     const documentType = new DocumentTypeEntity();
@@ -29,8 +33,14 @@ export class CustomerService {
   }
 
   newCustomer(customer: NewCustomerDTO): CustomerEntity {
-    const Customermap = this.transmap(customer);
-    return this.customerRepository.register(Customermap);
+    const customermap = this.transmap(customer);
+    const accountDto = new NewAccountDto();
+    const newCustomer = this.customerRepository.register(customermap);
+    accountDto.CustomerEntity = newCustomer.id;
+    accountDto.accountType = 'c49fdd2a-a365-11ed-a8fc-0242ac120002';
+    accountDto.balance = 0;
+    this.accountService.createAccount(accountDto);
+    return newCustomer;
   }
   /**
    * Obtener información de un cliente
