@@ -1,8 +1,8 @@
-import { IsNumber, IsUUID } from 'class-validator';
+import { IsUUID, IsNumber } from 'class-validator';
 
 export class newDepositDTO {
   @IsUUID()
   account: string;
   @IsNumber()
-  amount = 0;
+  amount: number;
 }

@@ -2,14 +2,29 @@ import { Injectable } from '@nestjs/common';
 import { DepositRepository, DepositEntity } from 'src/data';
 import { AccountRepository } from '../../../data/persistence/repositories/account.repository';
 import { newDepositDTO } from '../../dtos/new-deposit.dto';
+import { AccountService } from '../account/account.service';
 
 @Injectable()
 export class DepositService {
   constructor(
     private readonly depositRepository: DepositRepository,
     private readonly accountRepository: AccountRepository,
+    private readonly accountService: AccountService,
   ) {}
 
+  /**
+   * creacion
+   *
+   * @param deposit
+   * @returns depo
+   */
+  mapDeposit(deposit: newDepositDTO): DepositEntity {
+    const depo = new DepositEntity();
+    const account = this.accountRepository.findOneById(deposit.account);
+    depo.account = account;
+    depo.amount = deposit.amount;
+    return depo;
+  }
   /**
    * Crear un deposito
    *
@@ -24,6 +39,10 @@ export class DepositService {
     newDeposit.dateTime = new Date();
     return this.depositRepository.register(newDeposit);
   }
+
+  /**
+   *
+   */
 
   /**
    * Borrar un deposito

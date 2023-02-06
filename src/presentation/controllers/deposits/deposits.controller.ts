@@ -1,5 +1,5 @@
 import { Controller, Post } from '@nestjs/common';
-import { Body } from '@nestjs/common/decorators';
+import { Body, Delete, Param } from '@nestjs/common/decorators';
 import { DepositService } from '../../../business/services/deposit/deposit.service';
 import { newDepositDTO } from '../../../business/dtos/new-deposit.dto';
 import { DepositEntity } from 'src/data';
@@ -13,6 +13,11 @@ export class DepositsController {
     return this.depositService.createDeposit(deposit);
   }
 
-  //   @Put('delete/:accountId')
-  //   supDeposit() {}
+  /**
+   * borrar depositos
+   */
+  @Delete('delete/:id')
+  deleteDeposit(@Param('id') id: string): void {
+    this.depositService.deleteDeposit(id);
+  }
 }

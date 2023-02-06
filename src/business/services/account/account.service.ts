@@ -10,6 +10,9 @@ import {
 
 @Injectable()
 export class AccountService {
+  findOneById(account: string) {
+    throw new Error('Method not implemented.');
+  }
   constructor(
     private readonly accountRepository: AccountRepository,
     private readonly customerRepository: CustomerRepository,
