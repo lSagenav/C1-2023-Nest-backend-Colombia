@@ -1,5 +1,6 @@
 // Libraries
 import {
+  BadRequestException,
   Injectable,
   InternalServerErrorException,
   UnauthorizedException,
@@ -13,18 +14,24 @@ import { CustomerRepository } from 'src/data/persistence/repositories';
 
 // Services
 import { AccountService } from '../account/account.service';
+import { NewCustomerDTO } from '../../dtos/new-customer.dto';
+import { JwtService } from '@nestjs/jwt';
 
 // Entities
 import {
   AccountTypeEntity,
   CustomerEntity,
+  DocumentTypeEntity,
 } from 'src/data/persistence/entities';
+import { NewAccountDto } from 'src/business/dtos';
+import { jwtConstants } from 'src/configs/constants.config';
 
 @Injectable()
 export class SecurityService {
   constructor(
     private readonly customerRepository: CustomerRepository,
     private readonly accountService: AccountService,
+    private readonly jwtService: JwtService,
   ) {}
 
   /**
@@ -50,34 +57,40 @@ export class SecurityService {
    * @return {*}  {string}
    * @memberof SecurityService
    */
-  // signUp(user: CustomerModel): string {
-  //   const newCustomer = new CustomerEntity();
-  //   newCustomer.documentType = user.documentType;
-  //   newCustomer.document = user.document;
-  //   newCustomer.fullName = user.fullName;
-  //   newCustomer.email = user.email;
-  //   newCustomer.phone = user.phone;
-  //   newCustomer.password = user.password;
 
-  //   const customer = this.customerRepository.register(newCustomer);
+  // eslint-disable-next-line @typescript-eslint/ban-types
+  signUp(user: NewCustomerDTO): {} {
+    const newCustomer = new CustomerEntity();
+    const newDocumentType = new DocumentTypeEntity();
+    newDocumentType.id = uuid();
+    const findCustomer = this.customerRepository.findOneByEmail(user.email);
+    if (findCustomer) {
+      throw new BadRequestException();
+    } else {
+      newCustomer.documentType = newDocumentType;
+      newCustomer.document = user.document;
+      newCustomer.fullName = user.fullName;
+      newCustomer.email = user.email;
+      newCustomer.phone = user.phone;
+      newCustomer.password = user.password;
 
-  //   if (customer) {
-  //     const accountType = new AccountTypeEntity();
-  //     accountType.id = 'Falta el ID por defecto del tipo de cuenta';
-  //     const newAccount = {
-  //       id: '',
-  //       CustomerEntityId: customer.id,
-  //       accountType: accountType.id,
-  //       balance: 0,
-  //       state: true,
-  //     };
+      const customer = this.customerRepository.register(newCustomer);
 
-  //     const account = this.accountService.createAccount(newAccount);
+      if (customer) {
+        const accountType = new AccountTypeEntity();
+        accountType.id = uuid();
+        const newAccount = new NewAccountDto();
+        newAccount.CustomerEntity = customer.id;
+        newAccount.accountType = accountType.id;
 
-  //     if (account) return 'Falta retornar un JWT';
-  //     else throw new InternalServerErrorException();
-  //   } else throw new InternalServerErrorException();
-  // }
+        const account = this.accountService.createAccount(newAccount);
+
+        if (account)
+          return { access_token: this.jwtService.sign({ id: customer.id }) };
+        else throw new InternalServerErrorException();
+      } else throw new InternalServerErrorException();
+    }
+  }
 
   /**
    * Salir del sistema
@@ -86,6 +99,12 @@ export class SecurityService {
    * @memberof SecurityService
    */
   signOut(JWToken: string): void {
-    throw new Error('Method not implemented.');
+    this.jwtService.verify(JWToken, {
+      secret: jwtConstants.secret,
+      maxAge: '0h',
+    });
   }
+}
+function uuid(): string {
+  throw new Error('Function not implemented.');
 }

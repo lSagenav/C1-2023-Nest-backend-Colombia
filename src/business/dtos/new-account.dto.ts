@@ -7,4 +7,5 @@ export class NewAccountDto {
   accountType: string;
   @IsNumber()
   balance: number;
+  customerId: string;
 }

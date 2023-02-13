@@ -28,6 +28,7 @@ import {
   SecurityController,
   TransfersController,
 } from './presentation';
+import { JwtService } from '@nestjs/jwt';
 
 @Module({
   imports: [],
@@ -50,6 +51,7 @@ import {
     DepositRepository,
     DocumentTypeRepository,
     TransferRepository,
+    JwtService,
   ],
 })
 export class AppModule {}

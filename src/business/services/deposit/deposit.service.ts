@@ -68,11 +68,4 @@ export class DepositService {
    * @return {*}  {DepositEntity[]}
    * @memberof DepositService
    */
-  // getHistory(
-  //   accountId: string,
-  //   pagination: PaginationModel,
-  //   dataRange?: DataRangeModel,
-  // ): DepositEntity[] {
-  //   throw new Error('This method is not implemented');
-  // }
 }

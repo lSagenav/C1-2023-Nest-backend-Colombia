@@ -1,5 +1,6 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import { Body, Controller, Get, Post, Version } from '@nestjs/common';
-import { NewCustomerDTO, SignInDTO } from '../../../business/dtos';
+import { NewCustomerDTO, SignDTO } from '../../../business/dtos';
 
 @Controller('security')
 export class SecurityController {
@@ -12,7 +13,7 @@ export class SecurityController {
    */
   @Version('1')
   @Post('sign-in')
-  signInV1(@Body() signIn: SignInDTO): string {
+  signInV1(@Body() signIn: SignDTO): string {
     throw new Error('Method not implemented.');
   }
 
