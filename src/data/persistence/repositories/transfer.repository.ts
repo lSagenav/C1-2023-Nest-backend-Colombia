@@ -98,4 +98,40 @@ export class TransferRepository
   private softDelete(index: number): void {
     this.database[index].deletedAt = Date.now();
   }
+
+  findByIncomeId(id: string): TransferEntity[] {
+    const transferArray = this.database.filter(
+      (transfer) => transfer.inCome.id === id,
+    );
+    if (transferArray.length > 0) {
+      return transferArray;
+    } else {
+      throw new NotFoundException('No se encontro transferencia');
+    }
+  }
+
+  findByOutcomeId(id: string): TransferEntity[] {
+    const transferArray = this.database.filter(
+      (transfer) => transfer.outCome.id === id,
+    );
+    if (transferArray.length > 0) {
+      return transferArray;
+    } else {
+      throw new NotFoundException('No se encontro transferencia');
+    }
+  }
+
+  findByDateRange(
+    id: string,
+    dateInit: Date | number,
+    dateEnd: Date | number,
+  ): TransferEntity[] {
+    const arrayTransfers = this.findAll();
+    return arrayTransfers.filter(
+      (transfer) =>
+        transfer.id === id &&
+        transfer.dateTime >= dateInit &&
+        transfer.dateTime <= dateEnd,
+    );
+  }
 }

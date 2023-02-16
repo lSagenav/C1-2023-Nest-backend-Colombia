@@ -1,9 +1,11 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import { Body, Controller, Get, Post, Version } from '@nestjs/common';
+import { SecurityService } from 'src/business';
 import { NewCustomerDTO, SignDTO } from '../../../business/dtos';
 
 @Controller('security')
 export class SecurityController {
+  constructor(private readonly securityService: SecurityService) {}
   /**
    * Identificación del usuario del sistema
    *
@@ -13,8 +15,8 @@ export class SecurityController {
    */
   @Version('1')
   @Post('sign-in')
-  signInV1(@Body() signIn: SignDTO): string {
-    throw new Error('Method not implemented.');
+  signIn(@Body() customer: SignDTO) {
+    return this.securityService.signIn(customer);
   }
 
   /**
@@ -26,8 +28,8 @@ export class SecurityController {
    */
   @Version('1')
   @Post('sign-up')
-  signUpV1(@Body() signUp: NewCustomerDTO): string {
-    throw new Error('Method not implemented.');
+  signUp(@Body() customer: NewCustomerDTO) {
+    return this.securityService.signUp(customer);
   }
 
   /**
@@ -37,7 +39,7 @@ export class SecurityController {
    */
   @Version('1')
   @Get('logout')
-  logoutV1(): void {
-    throw new Error('Method not implemented.');
+  logout(@Body() body: { JWT: string }): boolean {
+    return this.securityService.signOut(body.JWT);
   }
 }

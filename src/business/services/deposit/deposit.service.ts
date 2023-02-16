@@ -1,30 +1,17 @@
-import { Injectable } from '@nestjs/common';
-import { DepositRepository, DepositEntity } from 'src/data';
-import { AccountRepository } from '../../../data/persistence/repositories/account.repository';
+import { Injectable, NotFoundException } from '@nestjs/common';
+import { DepositRepository, AccountRepository, DepositEntity } from 'src/data';
+import { DataRangeModel } from 'src/data/models/data-range.model';
+import { PaginationModel } from 'src/data/models/pagination.model';
+import { AccountService } from '../account';
 import { newDepositDTO } from '../../dtos/new-deposit.dto';
-import { AccountService } from '../account/account.service';
 
 @Injectable()
 export class DepositService {
   constructor(
     private readonly depositRepository: DepositRepository,
-    private readonly accountRepository: AccountRepository,
     private readonly accountService: AccountService,
+    private readonly accountRepository: AccountRepository,
   ) {}
-
-  /**
-   * creacion
-   *
-   * @param deposit
-   * @returns depo
-   */
-  mapDeposit(deposit: newDepositDTO): DepositEntity {
-    const depo = new DepositEntity();
-    const account = this.accountRepository.findOneById(deposit.account);
-    depo.account = account;
-    depo.amount = deposit.amount;
-    return depo;
-  }
   /**
    * Crear un deposito
    *
@@ -34,16 +21,18 @@ export class DepositService {
    */
   createDeposit(deposit: newDepositDTO): DepositEntity {
     const newDeposit = new DepositEntity();
-    newDeposit.account = this.accountRepository.findOneById(deposit.account);
-    newDeposit.amount = deposit.amount;
-    newDeposit.dateTime = new Date();
-    return this.depositRepository.register(newDeposit);
+    const newAccount = this.accountRepository.findOneById(deposit.account);
+    if (this.accountService.gettStatus(deposit.account)) {
+      newDeposit.amount = deposit.amount;
+      newDeposit.dateTime = Date.now();
+      newAccount.id = deposit.account;
+      newDeposit.account = newAccount;
+      this.accountService.putBalance(deposit.account, deposit.amount);
+      return this.depositRepository.register(newDeposit);
+    } else {
+      throw new NotFoundException('La cuenta no se encuentra activa');
+    }
   }
-
-  /**
-   *
-   */
-
   /**
    * Borrar un deposito
    *
@@ -51,8 +40,8 @@ export class DepositService {
    * @memberof DepositService
    */
   deleteDeposit(depositId: string): void {
-    const deposited = this.depositRepository.findOneById(depositId);
-    if (deposited.deletedAt === undefined) {
+    const deposit = this.depositRepository.findOneById(depositId);
+    if (deposit.deletedAt === undefined) {
       this.depositRepository.delete(depositId, true);
     } else {
       this.depositRepository.delete(depositId, false);
@@ -68,4 +57,20 @@ export class DepositService {
    * @return {*}  {DepositEntity[]}
    * @memberof DepositService
    */
+  getHistory(
+    accountId: string,
+    pagination: PaginationModel,
+    dataRange?: DataRangeModel,
+  ): DepositEntity[] {
+    const arrayTransfer = this.depositRepository.findByDataRange(
+      accountId,
+      0,
+      Date.now(),
+    );
+    const arrayTransferReturn: DepositEntity[] = [];
+    return arrayTransfer.slice(
+      pagination.actualPage * pagination.numberPages,
+      pagination.actualPage * pagination.numberPages + pagination.numberPages,
+    );
+  }
 }

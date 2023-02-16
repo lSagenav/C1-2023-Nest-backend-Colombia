@@ -16,17 +16,17 @@ export class DepositRepository
   }
 
   findByDataRange(
-    dateInit: Date | number,
-    dateEnd: Date | number,
+    id: string,
+    DateMin: number | Date,
+    DateMax: number | Date,
   ): DepositEntity[] {
-    const dataRange = this.database.filter(
-      (item) =>
-        typeof item.deletedAt === 'undefined' &&
-        item.dateTime >= dateInit &&
-        item.dateTime <= dateEnd,
+    const arrayDeposites = this.findAll();
+    return arrayDeposites.filter(
+      (deposit) =>
+        deposit.account.id === id &&
+        deposit.dateTime >= DateMin &&
+        deposit.dateTime <= DateMax,
     );
-    if (dataRange === undefined) throw new NotFoundException();
-    return dataRange;
   }
 
   register(entity: DepositEntity): DepositEntity {

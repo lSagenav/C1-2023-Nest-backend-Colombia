@@ -26,7 +26,7 @@ import {
   CustomersController,
   DepositsController,
   SecurityController,
-  TransfersController,
+  TransferController,
 } from './presentation';
 import { JwtService } from '@nestjs/jwt';
 
@@ -37,7 +37,7 @@ import { JwtService } from '@nestjs/jwt';
     CustomersController,
     DepositsController,
     SecurityController,
-    TransfersController,
+    TransferController,
   ],
   providers: [
     AccountService,
