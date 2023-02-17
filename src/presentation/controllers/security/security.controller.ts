@@ -13,8 +13,7 @@ export class SecurityController {
    * @return {*}  {string} Token JWT que identifica al usuario en sesión
    * @memberof SecurityController
    */
-  @Version('1')
-  @Post('sign-in')
+  @Post('/signIn')
   signIn(@Body() customer: SignDTO) {
     return this.securityService.signIn(customer);
   }
@@ -26,8 +25,7 @@ export class SecurityController {
    * @return {*}  {string} Token JWT que identifica al usuario en sesión
    * @memberof SecurityController
    */
-  @Version('1')
-  @Post('sign-up')
+  @Post('/sign-up')
   signUp(@Body() customer: NewCustomerDTO) {
     return this.securityService.signUp(customer);
   }
@@ -37,7 +35,6 @@ export class SecurityController {
    *
    * @memberof SecurityController
    */
-  @Version('1')
   @Get('logout')
   logout(@Body() body: { JWT: string }): boolean {
     return this.securityService.signOut(body.JWT);

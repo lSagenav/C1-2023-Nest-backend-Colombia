@@ -68,8 +68,9 @@ export class CustomerRepository
 
   update(id: string, entity: CustomerEntity): CustomerEntity {
     const index = this.database.findIndex(
-      (item) => item.id === id && (item.deletedAt ?? true) === true,
+      (item) => item.id === id && item.deletedAt === undefined,
     );
+    console.log('item', this.database);
     if (index >= 0) {
       this.database[index] = {
         ...this.database[index],
@@ -105,27 +106,5 @@ export class CustomerRepository
     );
     if (customer) return customer;
     else throw new NotFoundException(`El ID ${id} no existe en base de datos`);
-  }
-
-  /**
-   * Borra físicamente un cliente de la base de datos
-   *
-   * @private
-   * @param {number} index Indice del cliente a borrar
-   * @memberof CustomerRepository
-   */
-  private hardDelete(index: number): void {
-    throw new Error('This method is not implemented');
-  }
-
-  /**
-   * Borra lógicamente un cliente de la base de datos
-   *
-   * @private
-   * @param {number} index Indice del cliente a borrar
-   * @memberof CustomerRepository
-   */
-  private softDelete(index: number): void {
-    throw new Error('This method is not implemented');
   }
 }

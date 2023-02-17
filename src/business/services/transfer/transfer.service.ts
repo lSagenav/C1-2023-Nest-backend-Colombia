@@ -36,7 +36,7 @@ export class TransferService {
     const newMovement = new TransferEntity();
     const newIncome = this.accountRepository.findOneById(transfer.income);
     const newOutcome = this.accountRepository.findOneById(transfer.outcome);
-    if (newIncome.balance > Number(transfer.amount)) {
+    if (newOutcome.balance > Number(transfer.amount)) {
       newMovement.inCome = newIncome;
       newMovement.outCome = newOutcome;
       newMovement.amount = String(transfer.amount);

@@ -9,12 +9,9 @@ import { PipeValidatorConfig } from './configs';
 import { AppModule } from './app.module';
 
 async function bootstrap() {
-  const app = await NestFactory.create(AppModule);
+  const app = await NestFactory.create(AppModule, { cors: true });
   app.enableCors();
-  app.enableVersioning({
-    type: VersioningType.URI,
-  });
-  app.useGlobalPipes(new ValidationPipe(PipeValidatorConfig));
   await app.listen(3000);
 }
+
 bootstrap();
