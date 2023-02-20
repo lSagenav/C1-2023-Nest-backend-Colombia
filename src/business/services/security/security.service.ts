@@ -77,15 +77,15 @@ export class SecurityService {
     if (customer) {
       const newAccount = new NewAccountDto();
       newAccount.customerId = customer.id;
-      const accType = new AccountTypeEntity();
-      const newAccountType = this.accountTypeRepository.register(accType);
-      newAccount.accountType = newAccountType.id;
+      newAccount.accountType = 'c49fdd2a-a365-11ed-a8fc-0242ac120002';
+      newAccount.balance = 0;
       const account = this.accountService.createAccount(newAccount);
 
       if (account) {
-        const payload = { email: customer.email, index: customer.id };
-        return { access_token: this.jwtService.sign(payload) };
-      } else throw new InternalServerErrorException();
+        const payload = { email: customer.email, sub: customer.id };
+        return { access_token: this.jwtService.sign(payload), id: customer.id };
+      } else
+        throw new UnauthorizedException('Datos de identificación inválidos');
     } else throw new InternalServerErrorException();
   }
 

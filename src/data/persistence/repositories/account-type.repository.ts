@@ -63,7 +63,19 @@ export class AccountTypeRepository
   }
 
   findOneById(id: string): AccountTypeEntity {
-    const account = this.database.find((item) => item.id === id);
+    const accounts = [
+      {
+        id: 'c49fdd2a-a365-11ed-a8fc-0242ac120002',
+        name: 'Ahorros',
+        state: true,
+      },
+      {
+        id: 'c3221f3f-602e-4ff1-9c45-e85c14f5e987',
+        name: 'Corriente',
+        state: true,
+      },
+    ];
+    const account = accounts.find((a) => a.id === id);
     if (account) return account;
     else throw new NotFoundException(`El ID ${id} no existe en base de datos`);
   }

@@ -22,7 +22,7 @@
   "dependencies": {
     "@nestjs/common": "^9.0.0",
     "@nestjs/core": "^9.0.0",
-    "@nestjs/jwt": "^10.0.1",
+    "@nestjs/jwt": "^10.0.2",
     "@nestjs/platform-express": "^9.0.0",
     "@stdlib/constants-float64-pinf": "^0.0.8",
     "class-transformer": "^0.5.1",

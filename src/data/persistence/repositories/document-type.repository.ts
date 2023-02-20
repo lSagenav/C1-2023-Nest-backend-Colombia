@@ -8,6 +8,14 @@ export class DocumentTypeRepository
   extends RepositoryBase<DocumentTypeEntity>
   implements IDocumentTypeRepository
 {
+  constructor() {
+    super();
+    this.database.push({
+      id: '7f2b62a3-5bf3-40c4-b921-1a5aa3b3df60',
+      name: 'cedula',
+      state: true,
+    });
+  }
   findByState(state: boolean): DocumentTypeEntity[] {
     const status = this.database.filter((item) => item.state == state);
     return status;

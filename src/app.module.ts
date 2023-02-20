@@ -28,10 +28,11 @@ import {
   SecurityController,
   TransferController,
 } from './presentation';
-import { JwtService } from '@nestjs/jwt';
+import { JwtModule, JwtService } from '@nestjs/jwt';
+import { keysecret } from './business/services/security/secret-key';
 
 @Module({
-  imports: [],
+  imports: [JwtModule.register({ secret: keysecret.secret })],
   controllers: [
     AccountController,
     CustomersController,
@@ -51,7 +52,6 @@ import { JwtService } from '@nestjs/jwt';
     DepositRepository,
     DocumentTypeRepository,
     TransferRepository,
-    JwtService,
   ],
 })
 export class AppModule {}

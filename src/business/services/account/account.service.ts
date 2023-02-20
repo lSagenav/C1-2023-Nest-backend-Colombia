@@ -10,9 +10,6 @@ import {
 
 @Injectable()
 export class AccountService {
-  findOneById(account: string) {
-    throw new Error('Method not implemented.');
-  }
   constructor(
     private readonly accountRepository: AccountRepository,
     private readonly customerRepository: CustomerRepository,
@@ -20,10 +17,9 @@ export class AccountService {
   ) {}
 
   accountMapping(account: NewAccountDto): AccountEntity {
-    let newUserAccount = new AccountEntity();
-    newUserAccount = new AccountEntity();
+    const newUserAccount = new AccountEntity();
     newUserAccount.customer = this.customerRepository.findOneById(
-      account.CustomerEntity,
+      account.customerId,
     );
     newUserAccount.accountType = this.accountTypeRepository.findOneById(
       account.accountType,
