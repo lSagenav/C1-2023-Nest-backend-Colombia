@@ -22,7 +22,7 @@ import { NewCustomerDTO } from '../../dtos/new-customer.dto';
 // Entities
 import { CustomerEntity } from 'src/data/persistence/entities';
 import { DocumentTypeEntity } from '../../../data/persistence/entities/document-type.entity';
-import { AccountTypeEntity } from '../../../data/persistence/entities/account-type.entity';
+
 import { NewAccountDto, SignDTO } from 'src/business/dtos';
 
 @Injectable()
@@ -47,6 +47,7 @@ export class SecurityService {
       user.email,
       user.password,
     );
+    console.log(answer);
     if (answer) {
       const customer = this.customerRepository.findOneByEmail(user.email);
       const payload = { email: customer.email, sub: customer.id };
