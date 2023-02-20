@@ -50,7 +50,7 @@ export class SecurityService {
     if (answer) {
       const customer = this.customerRepository.findOneByEmail(user.email);
       const payload = { email: customer.email, sub: customer.id };
-      return { access_token: this.jwtService.sign(payload) };
+      return { access_token: this.jwtService.sign(payload), id: customer.id };
     } else throw new UnauthorizedException('Datos de identificación inválidos');
   }
 
