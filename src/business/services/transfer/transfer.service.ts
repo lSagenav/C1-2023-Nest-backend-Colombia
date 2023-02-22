@@ -73,6 +73,7 @@ export class TransferService {
       x < 1 + range + range * (pagination.actualPage - 1);
       x++
     ) {
+      if (x === pagination.size + 1) break;
       arrayTransferReturn.push(arrayTransfer[x - 1]);
     }
     return arrayTransferReturn;
@@ -107,6 +108,7 @@ export class TransferService {
       x < 1 + range + range * (pagination.actualPage - 1);
       x++
     ) {
+      if (x === pagination.size + 1) break;
       arrayTransferReturn.push(arrayTransfer[x - 1]);
     }
     return arrayTransferReturn;

@@ -29,7 +29,7 @@ export class TransferController {
   createTransfer(@Body() transfer: NewTransferDTO): TransferEntity {
     return this.transferService.createTransfer(transfer);
   }
-  @Post('/hOut/:id')
+  @Post('hOut/:id')
   getHistoryOut(
     @Param('id', new ParseUUIDPipe()) id: string,
     @Body() data: { actualPage: number; range: number },
@@ -41,7 +41,7 @@ export class TransferController {
     return this.transferService.getHistoryOut(id, newPagination, newDataRange);
   }
 
-  @Post('/hIncome/:id')
+  @Post('hIncome/:id')
   getHistoryIncome(
     @Param('id', new ParseUUIDPipe()) id: string,
     @Body() data: { actualPage: number; range: number },
