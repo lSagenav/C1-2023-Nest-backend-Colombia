@@ -21,7 +21,6 @@ import { NewCustomerDTO } from '../../dtos/new-customer.dto';
 
 // Entities
 import { CustomerEntity } from 'src/data/persistence/entities';
-import { DocumentTypeEntity } from '../../../data/persistence/entities/document-type.entity';
 
 import { NewAccountDto, SignDTO } from 'src/business/dtos';
 
@@ -64,15 +63,17 @@ export class SecurityService {
    */
   signUp(user: NewCustomerDTO) {
     const newCustomer = new CustomerEntity();
-    const docType = new DocumentTypeEntity();
-    docType.id = user.accountTypeId;
+    console.log(user);
+    const docType = this.documentTypeRepository.findOneById(
+      user.documentTypeId,
+    );
     newCustomer.documentType = docType;
     newCustomer.document = user.document;
     newCustomer.fullName = user.fullName;
     newCustomer.email = user.email;
     newCustomer.phone = user.phone;
     newCustomer.password = user.password;
-
+    console.log(newCustomer);
     const customer = this.customerRepository.register(newCustomer);
 
     if (customer) {

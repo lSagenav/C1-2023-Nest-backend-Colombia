@@ -10,11 +10,18 @@ export class DocumentTypeRepository
 {
   constructor() {
     super();
-    this.database.push({
-      id: '7f2b62a3-5bf3-40c4-b921-1a5aa3b3df60',
-      name: 'cedula',
-      state: true,
-    });
+    this.database.push(
+      {
+        id: 'ef8d2f28-2a51-489e-9d67-324fc1980bc4',
+        name: 'cedula de ciudadania',
+        state: true,
+      },
+      {
+        id: '48215fb0-b212-11ed-afa1-0242ac120002',
+        name: 'cedula de estrangeria',
+        state: true,
+      },
+    );
   }
   findByState(state: boolean): DocumentTypeEntity[] {
     const status = this.database.filter((item) => item.state == state);
@@ -40,7 +47,9 @@ export class DocumentTypeRepository
         id,
       } as DocumentTypeEntity;
     } else {
-      throw new NotFoundException(`El ID ${id} no existe en base de datos`);
+      throw new NotFoundException(
+        `el tipo de documento con el  ${id} no existe en base de datos`,
+      );
     }
     return this.database[index];
   }
@@ -59,8 +68,13 @@ export class DocumentTypeRepository
   }
 
   findOneById(id: string): DocumentTypeEntity {
+    console.log(id);
     const doc = this.database.find((item) => item.id === id);
+    console.log(doc);
     if (doc) return doc;
-    else throw new NotFoundException(`El ID ${id} no existe en base de datos`);
+    else
+      throw new NotFoundException(
+        `El tipo de documento con el  ${id} no existe en base de datos`,
+      );
   }
 }

@@ -1,22 +1,21 @@
 import { Injectable } from '@nestjs/common';
 import { NewAccountDto, NewCustomerDTO } from 'src/business/dtos';
 import { AccountService } from '../account/account.service';
-import {
-  CustomerEntity,
-  CustomerRepository,
-  DocumentTypeEntity,
-} from 'src/data';
+import { DocumentTypeRepository } from '../../../data/persistence/repositories/document-type.repository';
+import { CustomerEntity, CustomerRepository } from 'src/data';
 
 @Injectable()
 export class CustomerService {
   constructor(
     private readonly customerRepository: CustomerRepository,
     private readonly accountService: AccountService,
+    private readonly documentTypeRepository: DocumentTypeRepository,
   ) {}
 
   transmap(customer: NewCustomerDTO): CustomerEntity {
-    const documentType = new DocumentTypeEntity();
-    documentType.id = customer.documentTypeId;
+    const documentType = this.documentTypeRepository.findOneById(
+      customer.accountTypeId,
+    );
     const newCustomer = new CustomerEntity();
     newCustomer.documentType = documentType;
     newCustomer.document = customer.document;
@@ -24,7 +23,7 @@ export class CustomerService {
     newCustomer.email = customer.email;
     newCustomer.phone = customer.phone;
     newCustomer.password = customer.password;
-
+    console.log(newCustomer);
     return newCustomer;
   }
 

@@ -77,6 +77,9 @@ export class AccountTypeRepository
     ];
     const account = accounts.find((a) => a.id === id);
     if (account) return account;
-    else throw new NotFoundException(`El ID ${id} no existe en base de datos`);
+    else
+      throw new NotFoundException(
+        `el tipo de cuenta con el ${id} no existe en base de datos`,
+      );
   }
 }
