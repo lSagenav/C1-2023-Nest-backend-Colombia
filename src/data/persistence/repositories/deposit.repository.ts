@@ -20,6 +20,7 @@ export class DepositRepository
     DateMin: number | Date,
     DateMax: number | Date,
   ): DepositEntity[] {
+    console.log('ID AHBER QUE KEGA', id);
     const arrayDeposites = this.findAll();
     return arrayDeposites.filter(
       (deposit) =>
@@ -64,7 +65,6 @@ export class DepositRepository
   findAll(): DepositEntity[] {
     return this.database.filter((item) => item.deletedAt === undefined);
   }
-
   findOneById(id: string): DepositEntity {
     const deposit = this.database.find(
       (item) => item.id === id && (item.deletedAt ?? true) === true,

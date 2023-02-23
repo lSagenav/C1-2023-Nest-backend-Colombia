@@ -21,7 +21,7 @@ export class AccountService {
     newUserAccount.customer = this.customerRepository.findOneById(
       account.customerId,
     );
-    console.log(account);
+
     newUserAccount.accountType = this.accountTypeRepository.findOneById(
       account.accountType,
     );

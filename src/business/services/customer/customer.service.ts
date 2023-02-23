@@ -23,7 +23,7 @@ export class CustomerService {
     newCustomer.email = customer.email;
     newCustomer.phone = customer.phone;
     newCustomer.password = customer.password;
-    console.log(newCustomer);
+
     return newCustomer;
   }
 

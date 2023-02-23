@@ -1,5 +1,5 @@
 import { Controller, ParseUUIDPipe, Post } from '@nestjs/common';
-import { Body, Delete, Param } from '@nestjs/common/decorators';
+import { Body, Delete, Get, Param } from '@nestjs/common/decorators';
 import { DepositService } from '../../../business/services/deposit/deposit.service';
 import { newDepositDTO } from '../../../business/dtos/new-deposit.dto';
 import { DepositEntity } from 'src/data';
@@ -8,6 +8,11 @@ import { PaginationEntity } from 'src/data/persistence/entities/pagination.entit
 @Controller('deposits')
 export class DepositsController {
   constructor(private readonly depositService: DepositService) {}
+
+  @Get('findall')
+  findall(): DepositEntity[] {
+    return this.depositService.allDeposit();
+  }
 
   @Post('newDeposit')
   createDeposit(@Body() deposit: newDepositDTO): DepositEntity {
@@ -31,7 +36,7 @@ export class DepositsController {
    * @return {*}  {DepositEntity[]}
    * @memberof DepositController
    */
-  @Post('/gethistory/:id')
+  @Post('gethistory/:id')
   getHistory(
     @Param('id', new ParseUUIDPipe()) id: string,
     @Body() data: { actualPage: number; range: number },

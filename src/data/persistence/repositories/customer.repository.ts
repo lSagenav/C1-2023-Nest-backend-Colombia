@@ -70,7 +70,7 @@ export class CustomerRepository
     const index = this.database.findIndex(
       (item) => item.id === id && item.deletedAt === undefined,
     );
-    console.log('item', this.database);
+
     if (index >= 0) {
       this.database[index] = {
         ...this.database[index],

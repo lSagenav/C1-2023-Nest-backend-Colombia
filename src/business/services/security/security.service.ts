@@ -46,7 +46,7 @@ export class SecurityService {
       user.email,
       user.password,
     );
-    console.log(answer);
+
     if (answer) {
       const customer = this.customerRepository.findOneByEmail(user.email);
       const payload = { email: customer.email, sub: customer.id };
@@ -63,7 +63,7 @@ export class SecurityService {
    */
   signUp(user: NewCustomerDTO) {
     const newCustomer = new CustomerEntity();
-    console.log(user);
+
     const docType = this.documentTypeRepository.findOneById(
       user.documentTypeId,
     );
@@ -73,7 +73,7 @@ export class SecurityService {
     newCustomer.email = user.email;
     newCustomer.phone = user.phone;
     newCustomer.password = user.password;
-    console.log(newCustomer);
+
     const customer = this.customerRepository.register(newCustomer);
 
     if (customer) {

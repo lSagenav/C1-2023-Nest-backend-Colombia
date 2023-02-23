@@ -68,9 +68,7 @@ export class DocumentTypeRepository
   }
 
   findOneById(id: string): DocumentTypeEntity {
-    console.log(id);
     const doc = this.database.find((item) => item.id === id);
-    console.log(doc);
     if (doc) return doc;
     else
       throw new NotFoundException(

@@ -47,6 +47,9 @@ export class DepositService {
       this.depositRepository.delete(depositId, false);
     }
   }
+  allDeposit(): DepositEntity[] {
+    return this.depositRepository.findAll();
+  }
 
   /**
    * Obtener el historial de los depósitos en una cuenta
@@ -67,10 +70,8 @@ export class DepositService {
       0,
       Date.now(),
     );
+    console.log('ARRAY', arrayTransfer);
     const arrayTransferReturn: DepositEntity[] = [];
-    return arrayTransfer.slice(
-      pagination.actualPage * pagination.numberPages,
-      pagination.actualPage * pagination.numberPages + pagination.numberPages,
-    );
+    return arrayTransfer;
   }
 }
